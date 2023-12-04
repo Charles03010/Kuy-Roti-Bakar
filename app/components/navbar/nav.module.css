@@ -1,0 +1,21 @@
+.navMenu {
+  display: flex;
+  justify-content: space-evenly;
+  width: 25rem;
+}
+.navLink.active{
+    color: var(--primary);
+    position: relative;
+}
+.navLink.active::after {
+  content: " ";
+  top: 100%;
+  left: 45%;
+  border: 3px solid var(--primary);
+  position: absolute;
+  border-radius: 50%;
+}
+nav.scrolled{
+    padding: 1.5rem 2rem;
+    background-color: var(--white);
+}
