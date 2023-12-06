@@ -74,7 +74,7 @@ const Menu = () => {
       <div className={style.menu}>
         <Image
           className={style.menuImage}
-          src={`/menu/${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Foto}.jpg`}
+          src={`/Menu/${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Foto}.jpg`}
           alt="Kuy Logo"
           style={{ width: "31.25rem" }}
           width={500}
