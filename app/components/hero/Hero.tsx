@@ -3,7 +3,7 @@ import Link from "next/link";
 import style from "./hero.module.css";
 import Image from "next/image";
 
-const Hero = (props: any) => {
+const Hero = () => {
   return (
     <>
       <div className={style.hero}>

@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+  gap: 4rem;
+}
+.container img{
+  cursor: pointer;
+}

@@ -34,9 +34,9 @@ const Navbar = (props: any) => {
       <nav className={style[scrollY]}>
         <Link href="/">
           <Image
-            src="/logo.png"
+            src="/logo-merah.png"
             alt="Kuy Logo"
-            width={50}
+            width={100}
             height={0}
             quality={100}
             loading="lazy"
@@ -46,17 +46,19 @@ const Navbar = (props: any) => {
           <Link className={`${style.navLink} ${style[props.home]}`} href="/">
             Home
           </Link>
-          <Link
+          {/* <Link
             className={`${style.navLink} ${style[props.dashboard]}`}
             href="/dashboard"
           >
             Dashboard
-          </Link>
-          <Link className={`${style.navLink} ${style[props.menu]}`} href="#">
+          </Link> */}
+          <Link className={`${style.navLink} ${style[props.menu]}`} href="/menu">
             Menu
           </Link>
         </div>
-        <a href="#">Login</a>
+        <a href="#">
+          {/* Login */}
+          </a>
       </nav>
     </>
   );

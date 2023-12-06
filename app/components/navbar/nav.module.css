@@ -3,19 +3,26 @@
   justify-content: space-evenly;
   width: 25rem;
 }
-.navLink.active{
-    color: var(--primary);
-    position: relative;
+.navLink.active {
+  color: var(--kuy-merah);
+  position: relative;
+}
+nav.scrolled .navLink.active {
+  color: var(--kuy-kuning);
+}
+nav.scrolled .navLink.active::after {
+  border: 3px solid var(--kuy-kuning);
 }
 .navLink.active::after {
   content: " ";
   top: 100%;
   left: 45%;
-  border: 3px solid var(--primary);
+  border: 3px solid var(--kuy-merah);
   position: absolute;
   border-radius: 50%;
 }
-nav.scrolled{
-    padding: 1.5rem 2rem;
-    background-color: var(--white);
+nav.scrolled {
+  padding: 0rem 2rem;
+  background-color: var(--kuy-merah);
+  color: var(--white);
 }
