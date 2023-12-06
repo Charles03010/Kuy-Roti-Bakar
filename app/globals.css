@@ -1,24 +1,20 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 :root {
+  font-size: calc(16 * 100vw / 1920);
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --primary:#D96A29;
-  --secondary:#F2A74B;
-  --third:#D9BC9A;
-  --bg:#591902;
-  --text:#0D0D0D;
-  --white:#fefef8;
-  --kuy-merah:#a00000;
-  --kuy-kuning:#e4bc12;
+  --primary: #d96a29;
+  --secondary: #f2a74b;
+  --third: #d9bc9a;
+  --bg: #591902;
+  --text: #0d0d0d;
+  --white: #fefef8;
+  --kuy-merah: rgba(160, 0, 0, 0.8);
+  --kuy-kuning: #e4bc12;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -26,9 +22,8 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-body{
-  /* height: 150vh; */
-  background-image : url(../public/bg.png);
+body {
+  background-image: url(../public/bg.png);
 }
 nav {
   text-decoration: none;

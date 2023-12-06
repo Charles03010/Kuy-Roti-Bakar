@@ -37,6 +37,7 @@ const Navbar = (props: any) => {
             src="/logo-merah.png"
             alt="Kuy Logo"
             width={100}
+            style={{ width: "6.25rem" }}
             height={0}
             quality={100}
             loading="lazy"
@@ -46,19 +47,14 @@ const Navbar = (props: any) => {
           <Link className={`${style.navLink} ${style[props.home]}`} href="/">
             Home
           </Link>
-          {/* <Link
-            className={`${style.navLink} ${style[props.dashboard]}`}
-            href="/dashboard"
+          <Link
+            className={`${style.navLink} ${style[props.menu]}`}
+            href="/menu"
           >
-            Dashboard
-          </Link> */}
-          <Link className={`${style.navLink} ${style[props.menu]}`} href="/menu">
             Menu
           </Link>
         </div>
-        <a href="#">
-          {/* Login */}
-          </a>
+        <a href="#"></a>
       </nav>
     </>
   );

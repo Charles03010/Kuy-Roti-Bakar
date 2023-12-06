@@ -22,7 +22,7 @@ const Menu = () => {
       ...prevState,
       Keranjang: [
         {
-          ...prevState.Keranjang[0],
+          ...prevState.Keranjang[Object.keys(Data.Keranjang).length - 1],
           [key]: value,
         },
       ],
@@ -53,27 +53,30 @@ const Menu = () => {
       }));
   }
   useEffect(() => {
-    if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa != "") {
-    setData((prevState) => ({
-      ...prevState,
-      Keranjang: [
-        {
-          ...prevState.Keranjang[0],
-          Foto: Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa,
-        },
-      ],
-    }));}
-  })
+    console.log(Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa);
+    if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa !== "") {
+      setData((prevState) => ({
+        ...prevState,
+        Keranjang: [
+          {
+            ...prevState.Keranjang[Object.keys(Data.Keranjang).length - 1],
+            Foto: Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa,
+          },
+        ],
+      }));
+    }
+  }, [Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa]);
   return (
     <>
       <h2 id="Menu" className={style.title}>
-        Menu
+        Ayo Kreasikan Roti Kamu!
       </h2>
       <div className={style.menu}>
         <Image
           className={style.menuImage}
           src={`/menu/${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Foto}.jpg`}
           alt="Kuy Logo"
+          style={{ width: "31.25rem" }}
           width={500}
           height={0}
           quality={100}

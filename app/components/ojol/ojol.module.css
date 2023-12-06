@@ -4,6 +4,23 @@
   padding: 3rem;
   gap: 4rem;
 }
-.container img{
+.container img {
   cursor: pointer;
+}
+.divider {
+  width: 100%;
+  border-bottom: 2px solid black;
+  line-height: 1px;
+  margin: 10px 0 20px;
+  text-align: center;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+  font-weight: 500;
+}
+.divider span {
+  background: #f4f6e6;
+  font-size: 1.5rem;
+  font-family: "Montserrat";
+  padding: 0 10px;
 }

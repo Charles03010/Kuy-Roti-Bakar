@@ -15,6 +15,7 @@ const Loader = () => {
     <>
       <div id={style.globalLoader}>
           <Image
+          style={{ width: "18.75rem" }}
             src="/logo-merah.png"
             alt="Kuy Logo"
             width={300}

@@ -7,8 +7,8 @@ export default function Home() {
     <>
       <Navbar home={"active"} />
       <Hero />
-      <Ojol />
       <Menu />
+      <Ojol />
     </>
   );
 }

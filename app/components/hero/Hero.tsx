@@ -25,6 +25,7 @@ const Hero = () => {
         <div>
           <Image
             className={style.heroImage}
+            style={{ width: "31.25rem" }}
             src="/menu/Keju.jpg"
             loading="lazy"
             alt="Kuy Logo"
