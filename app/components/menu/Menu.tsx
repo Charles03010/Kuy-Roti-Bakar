@@ -4,51 +4,66 @@ import style from "./menu.module.css";
 import Image from "next/image";
 
 const Menu = () => {
-  const [Roti, setRoti] = useState("");
-  const [Rasa, setRasa] = useState("");
-  const [Ukuran, setUkuran] = useState("");
-  const [Topping, setTopping] = useState("");
-  const [Foto, setFoto] = useState("Polos");
-  const [Harga, setHarga] = useState(0);
-  const [Text, setText] = useState("");
-  const [Danger, setDanger] = useState(false);
-  function HandleClickRoti(params: string) {
-    setDanger(false);
-    setRoti(params);
-  }
-  function HandleClickUkuran(params: string) {
-    setDanger(false);
-    setUkuran(params);
-  }
-  function HandleClickRasa(params: string) {
-    setDanger(false);
-    setFoto(params);
-    setRasa(params);
-  }
-  function HandleClickTopping(params: string) {
-    setDanger(false);
-    setTopping(params);
+  const [Data, setData] = useState({
+    Text: "",
+    Keranjang: [
+      {
+        Roti: "",
+        Rasa: "",
+        Ukuran: "",
+        Topping: "",
+        Foto: "Polos",
+        Harga: 0,
+      },
+    ],
+  });
+  function HandleSetData(key: string, value: any) {
+    setData((prevState) => ({
+      ...prevState,
+      Keranjang: [
+        {
+          ...prevState.Keranjang[0],
+          [key]: value,
+        },
+      ],
+    }));
   }
   function HandleClickSubmit() {
-    if (Roti === "") {
-      setDanger(true);
-      setText("Pilih Roti Dulu!");
-    } else if (Ukuran === "") {
-      setDanger(true);
-      setText("Pilih Ukuran Dulu!");
-    } else if (Rasa === "") {
-      setDanger(true);
-      setText("Pilih Rasa Dulu!");
+    let text = "";
+    if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Roti === "") {
+      text = "Pilih Roti Dulu!";
+    } else if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Ukuran === "") {
+      text = "Pilih Ukuran Dulu!";
+    } else if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "") {
+      text = "Pilih Rasa Dulu!";
     } else {
-      let message = `Halo, saya ingin memesan roti ${Roti} dengan ukuran ${Ukuran} dan rasa ${Rasa}.`;
-      if (Topping != "") {
-        message += `Topping yang saya pilih adalah ${Topping}.`;
+      let message = `Halo, saya ingin memesan roti ${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Roti} dengan ukuran ${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Ukuran} dan rasa ${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa}.`;
+      if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping != "") {
+        message += `Topping yang saya pilih adalah ${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping}.`;
       }
-      const phoneNumber = "62895616602968"; 
-      const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-      window.location.href = whatsappUrl;
-    }
+      const phoneNumber = "62895616602968";
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(
+        message
+        )}`;
+        window.location.href = whatsappUrl;
+      }
+      setData((prevState) => ({
+        ...prevState,
+        Text: text,
+      }));
   }
+  useEffect(() => {
+    if (Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa != "") {
+    setData((prevState) => ({
+      ...prevState,
+      Keranjang: [
+        {
+          ...prevState.Keranjang[0],
+          Foto: Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa,
+        },
+      ],
+    }));}
+  })
   return (
     <>
       <h2 id="Menu" className={style.title}>
@@ -57,7 +72,7 @@ const Menu = () => {
       <div className={style.menu}>
         <Image
           className={style.menuImage}
-          src={`/menu/${Foto}.jpg`}
+          src={`/menu/${Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Foto}.jpg`}
           alt="Kuy Logo"
           width={500}
           height={0}
@@ -65,99 +80,125 @@ const Menu = () => {
           loading="lazy"
         />
         <div>
-          {Danger ? (
+          {Data.Text !== "" ? (
             <div className="alert alert-danger" role="alert">
-              {Text}
+              {Data.Text}
             </div>
           ) : (
             ""
           )}
-          <h3 className={style.label}>Pilihan Roti : {Roti}</h3>
+          <h3 className={style.label}>Pilihan Roti : {Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Roti}</h3>
           <div className={style.pilihan}>
             <button
-              onClick={() => HandleClickRoti("Polos")}
-              className={`btn border ${Roti === "Polos" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Roti","Polos")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Roti === "Polos" ? "btn-success" : "btn-light"
+              }`}
             >
               Polos
             </button>
             <button
-              onClick={() => HandleClickRoti("Pastry")}
-              className={`btn border ${Roti === "Pastry" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Roti","Pastry")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Roti === "Pastry" ? "btn-success" : "btn-light"
+              }`}
             >
               Pastry
             </button>
           </div>
-          <h3 className={style.label}>Pilihan Ukuran : {Ukuran}</h3>
+          <h3 className={style.label}>Pilihan Ukuran : {Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Ukuran}</h3>
           <div className={style.pilihan}>
             <button
-              onClick={() => HandleClickUkuran("Large")}
-              className={`btn border ${Ukuran === "Large" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Ukuran","Large")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Ukuran === "Large" ? "btn-success" : "btn-light"
+              }`}
             >
               Large
             </button>
             <button
-              onClick={() => HandleClickUkuran("Small")}
-              className={`btn border ${Ukuran === "Small" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Ukuran","Small")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Ukuran === "Small" ? "btn-success" : "btn-light"
+              }`}
             >
               Small
             </button>
           </div>
-          <h3 className={style.label}>Pilihan Rasa : {Rasa}</h3>
+          <h3 className={style.label}>Pilihan Rasa : {Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa}</h3>
           <div className={style.pilihan}>
             <button
-              onClick={() => HandleClickRasa("Strawberry")}
-              className={`btn border ${Rasa === "Strawberry" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Strawberry")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Strawberry" ? "btn-success" : "btn-light"
+              }`}
             >
               Strawberry
             </button>
             <button
-              onClick={() => HandleClickRasa("Blueberry")}
-              className={`btn border ${Rasa === "Blueberry" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Blueberry")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Blueberry" ? "btn-success" : "btn-light"
+              }`}
             >
               Blueberry
             </button>
             <button
-              onClick={() => HandleClickRasa("Coklat")}
-              className={`btn border ${Rasa === "Coklat" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Coklat")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Coklat" ? "btn-success" : "btn-light"
+              }`}
             >
               Coklat
             </button>
             <button
-              onClick={() => HandleClickRasa("Tiramisu")}
-              className={`btn border ${Rasa === "Tiramisu" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Tiramisu")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Tiramisu" ? "btn-success" : "btn-light"
+              }`}
             >
               Tiramisu
             </button>
             <button
-              onClick={() => HandleClickRasa("Matcha")}
-              className={`btn border ${Rasa === "Matcha" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Matcha")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Matcha" ? "btn-success" : "btn-light"
+              }`}
             >
               Matcha
             </button>
             <button
-              onClick={() => HandleClickRasa("Keju")}
-              className={`btn border ${Rasa === "Keju" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Rasa","Keju")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Rasa === "Keju" ? "btn-success" : "btn-light"
+              }`}
             >
               Keju
             </button>
           </div>
-          <h3 className={style.label}>Pilihan Topping : {Topping}</h3>
+          <h3 className={style.label}>Pilihan Topping : {Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping}</h3>
           <div className={style.pilihan}>
             <button
-              onClick={() => HandleClickTopping("Kacang")}
-              className={`btn border ${Topping === "Kacang" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Topping","Kacang")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping === "Kacang" ? "btn-success" : "btn-light"
+              }`}
             >
               Kacang
             </button>
             <button
-              onClick={() => HandleClickTopping("Oreo")}
-              className={`btn border ${Topping === "Oreo" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Topping","Oreo")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping === "Oreo" ? "btn-success" : "btn-light"
+              }`}
             >
               Oreo
             </button>
             <button
-              onClick={() => HandleClickTopping("Keju")}
-              className={`btn border ${Topping === "Keju" ? "btn-success" : "btn-light"}`}
+              onClick={() => HandleSetData("Topping","Keju")}
+              className={`btn border ${
+                Data.Keranjang[Object.keys(Data.Keranjang).length - 1].Topping === "Keju" ? "btn-success" : "btn-light"
+              }`}
             >
               Keju
             </button>
