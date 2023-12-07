@@ -17,7 +17,12 @@ const Hero = () => {
             lapisan cita rasa yang memanjakan lidah.
           </p>
           <div className={style.heroButton}>
-            <Link href="https://wa.me/62895616602968" className="btn btn-light border">
+            <Link
+              href={`https://wa.me/62895616602968?text=${encodeURIComponent(
+                "Halo, saya ingin memesan"
+              )}`}
+              className="btn btn-light border"
+            >
               <span className={style.underLine}>Kuy! Order Sekarang</span>
             </Link>
           </div>
