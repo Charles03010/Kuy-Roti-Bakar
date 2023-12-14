@@ -28,7 +28,7 @@ const Navbar = (props: any) => {
     }
 
     watchScroll();
-  }, []);
+  }, [scrollY]);
   return (
     <>
       <nav className={style[scrollY]}>
