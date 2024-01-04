@@ -1,0 +1,190 @@
+{% extends 'layout.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/navbar.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/hero.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/menu.css') }}"
+/>
+<title>Kuy! Roti Bakar 🍞</title>
+{% endblock %} {% block navbar %}
+<span id="scroll-position-data" style="display: none">0</span>
+<nav>
+  <a href="/">
+    <img
+      src="{{ url_for('static', filename='img/logo-merah.png') }}"
+      alt="Kuy Logo"
+      class="navImg"
+    />
+  </a>
+  <div class="navMenu">
+    <a class="navLink" href="/"> Home </a>
+    <a class="navLink active" href="/menu"> Menu </a>
+  </div>
+  <a href="#"></a>
+</nav>
+{% endblock %} {% block body %}
+
+<div style="padding-top: 7.5rem">
+  <h2 id="Menu" class="title">Ayo Kreasikan Roti Kamu!</h2>
+  <div class="menu">
+    <img
+      class="menuImage"
+      src="{{ url_for('static',filename='img/Menu/Polos.jpg') }}"
+      alt="Roti Bakar"
+    />
+    <div>
+      <h3 id="rotiLabel" class="label">Pilihan Roti:</h3>
+      <div id="roti" class="pilihan">
+        <button
+          onclick="HandleSetData('Roti','Polos',this)"
+          class="btn btn-light border"
+        >
+          Polos
+        </button>
+        <button
+          onclick="HandleSetData('Roti','Pastry',this)"
+          class="btn btn-light border"
+        >
+          Pastry
+        </button>
+      </div>
+      <h3 id="ukuranLabel" class="label">Pilihan Ukuran:</h3>
+      <div id="ukuran" class="pilihan">
+        <button
+          onclick="HandleSetData('Ukuran','Large',this)"
+          class="btn btn-light border"
+        >
+          Large
+        </button>
+        <button
+          onclick="HandleSetData('Ukuran','Small',this)"
+          class="btn btn-light border"
+        >
+          Small
+        </button>
+      </div>
+      <h3 id="rasaLabel" class="label">Pilihan Rasa:</h3>
+      <div id="rasa" class="pilihan">
+        <button
+          onclick="HandleSetData('Rasa','Strawberry',this)"
+          class="btn btn-light border"
+        >
+          Strawberry
+        </button>
+        <button
+          onclick="HandleSetData('Rasa','Blueberry',this)"
+          class="btn btn-light border"
+        >
+          Blueberry
+        </button>
+        <button
+          onclick="HandleSetData('Rasa','Coklat',this)"
+          class="btn btn-light border"
+        >
+          Coklat
+        </button>
+        <button
+          onclick="HandleSetData('Rasa','Tiramisu',this)"
+          class="btn btn-light border"
+        >
+          Tiramisu
+        </button>
+        <button
+          onclick="HandleSetData('Rasa','Matcha',this)"
+          class="btn btn-light border"
+        >
+          Matcha
+        </button>
+        <button
+          onclick="HandleSetData('Rasa','Keju',this)"
+          class="btn btn-light border"
+        >
+          Keju
+        </button>
+      </div>
+      <h3 id="toppingLabel" class="label">Pilihan Topping:</h3>
+      <div id="topping" class="pilihan">
+        <button
+          onclick="HandleSetData('Topping','Kacang',this)"
+          class="btn btn-light border"
+        >
+          Kacang
+        </button>
+        <button
+          onclick="HandleSetData('Topping','Oreo',this)"
+          class="btn btn-light border"
+        >
+          Oreo
+        </button>
+        <button
+          onclick="HandleSetData('Topping','Keju',this)"
+          class="btn btn-light border"
+        >
+          Keju
+        </button>
+      </div>
+      <br />
+      <div class="pilihan">
+        <button onclick="HandleClickSubmit()" class="btn btn-success">
+          Order Sekarang!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block js %}
+<script>
+  window.addEventListener("scroll", function () {
+    var scrollPosition = window.scrollY;
+    document.getElementById("scroll-position-data").textContent =
+      scrollPosition;
+    if (scrollPosition > 0) {
+      document.querySelector("nav").classList.add("scrolled");
+    } else {
+      document.querySelector("nav").classList.remove("scrolled");
+    }
+  });
+</script>
+<script>
+  let data = {
+    Roti: "",
+    Ukuran: "",
+    Rasa: "",
+    Topping: "",
+  };
+  function HandleSetData(key, value, elem) {
+    let img = document.querySelector(".menuImage");
+    document.querySelector("#" + key.toLowerCase() + "Label").textContent =
+      "Pilihan " + key + ": " + value;
+    //elem.classList.add("btn-success");
+    elem.classList = "btn border btn-success";
+    let active = document.querySelectorAll("#" + key.toLowerCase() + " button");
+    active.forEach((element) => {
+      if (element != elem) {
+        element.classList = "btn btn-light border";
+      }
+    });
+    if (value == data[key]) {
+      data[key] = "";
+      elem.classList = "btn btn-light border";
+    } else {
+      data[key] = value;
+    }
+    if (key == "Rasa") {
+      img.src = "/static/img/Menu/" + value + ".jpg";
+      if (data[key] == "") {
+        img.src = "/static/img/Menu/polos.jpg";
+      }
+    }
+    console.log(data);
+  }
+  function HandleClickSubmit() {}
+</script>
+{% endblock %}

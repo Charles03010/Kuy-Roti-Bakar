@@ -1,0 +1,53 @@
+{% extends 'layout.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/login.css') }}"
+/>
+<title>Login</title>
+{% endblock %} {% block body %}
+<div class="min-vh-100 row d-flex align-items-center justify-content-center">
+  <div class="col-4">
+    <img
+      src="{{ url_for('static', filename='img/logo-merah.png') }}"
+      alt="Kuy Logo"
+      class="navImg"
+    />
+  </div>
+  <div class="col-4">
+    <form action="/login" method="post">
+      <div class="mb-3">
+        <label for="inpNo" class="form-label fw-bold">No Telepon</label>
+        <input
+          id="inpNo"
+          type="text"
+          class="form-control bg-transparent"
+          name="inpNo"
+          maxlength="13"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+          placeholder="Masukan Nomor Telepon Anda"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="inpPass" class="form-label fw-bold">Password</label>
+        <input
+          id="inpPass"
+          type="password"
+          class="form-control bg-transparent"
+          name="inpPass"
+          placeholder="Masukan Password Anda"
+        />
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary mt-4 fw-bold">
+          Login
+        </button>
+      </div>
+      <a
+        href="{{ url_for('register') }}"
+        class="nav-link my-2 mx-auto text-center fw-bold text-secondary"
+        >Register</a
+      >
+    </form>
+  </div>
+</div>
+{% endblock %}

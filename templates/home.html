@@ -1,0 +1,38 @@
+{% extends 'layout.html' %} {% block head %}
+<title>Home</title>
+<!-- <h1>Inventaris</h1> -->
+{% endblock %} 
+{% block navbar %}
+<nav class="navbar" style="background-color: #e3f2fd">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Inventaris</span>
+    <a href="/logout" class="btn btn-primary">Logout</a>
+  </div>
+</nav>
+{% endblock %}
+{% block body %}
+
+<div class="mb-3"></div>
+<div class="container">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ID Produk</th>
+        <th scope="col">Nama Produk</th>
+        <th scope="col">Stok</th>
+        <th scope="col">Harga</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in users %}
+      <tr>
+        <td scope="row">{{ row.0 }}</td>
+        <td>{{ row.1 }}</td>
+        <td>{{ row.2 }} Unit</td>
+        <td>{{ 'Rp. {:0,d}'.format(row.3).replace(',', '.') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
