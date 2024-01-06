@@ -11,6 +11,7 @@ app.config['MYSQL_HOST'] = str(os.environ.get('DB_HOST'))
 app.config['MYSQL_USER'] = str(os.environ.get('DB_USERNAME'))
 app.config['MYSQL_PASSWORD'] = str(os.environ.get('DB_PASSWORD'))
 app.config['MYSQL_DB'] = str(os.environ.get('DB_DATABASE'))
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 

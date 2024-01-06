@@ -1,3 +1,14 @@
+:root {
+  font-size: calc(16 * 100vw / 1366);
+  --primary: #d96a29;
+  --secondary: #f2a74b;
+  --third: #d9bc9a;
+  --bg: #591902;
+  --text: #0d0d0d;
+  --white: #fefef8;
+  --kuy-merah: rgba(160, 0, 0, 0.8);
+  --kuy-kuning: #e4bc12;
+}
 body {
   font-family: "Montserrat", sans-serif;
   background-image: url(../img/bg.png);
