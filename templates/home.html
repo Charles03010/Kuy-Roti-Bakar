@@ -30,8 +30,8 @@
           <th rowspan="2" scope="col" colspan="2">No</th>
           <th rowspan="2" scope="col">Nama</th>
           <th rowspan="2" scope="col">No Telepon</th>
-          <th rowspan="2" scope="col">Kode Unik</th>
           <th scope="col" colspan="5">Pesanan</th>
+          <th rowspan="2" scope="col">Total</th>
         </tr>
         <tr class="align-middle text-center">
           <th colspan="2">Roti</th>
@@ -41,7 +41,8 @@
         </tr>
       </thead>
       <tbody>
-        {% for trx in transaksi %} {% set pesanan = trx.pesanan["pesanan"] %}
+        {% for trx in transaksi %} {% if trx.pesanan["pesanan"] | count == 1 %}
+        {% set pesanan = trx.pesanan["pesanan"][0] %}
         <tr class="align-middle text-center">
           <td scope="row">{{ loop.index }}</td>
           <td ondblclick="updateStatus({{ trx.id }}, '{{ trx.status }}')">
@@ -53,14 +54,45 @@
           </td>
           <td>{{ trx.nama }}</td>
           <td>{{ trx.nomor_telepon }}</td>
-          <td>{{ trx.kode_unik }}</td>
           <td>{{ pesanan["jumlah"] if pesanan["jumlah"] != "" else "-" }}</td>
           <td>{{ pesanan["roti"] if pesanan["roti"] != "" else "-" }}</td>
           <td>{{ pesanan["ukuran"] if pesanan["ukuran"] != "" else "-" }}</td>
           <td>{{ pesanan["rasa"] if pesanan["rasa"] != "" else "-" }}</td>
-          <td>{{ pesanan["topping"] if pesanan["topping"] != "" else "-" }}</td>
+          <td>
+            {{ pesanan["topping"] if pesanan["topping"] != none else "-" }}
+          </td>
+          <td>
+            {{ "Rp.
+            {:,.0f}".format(trx.kode_unik+trx.pesanan["total"]).replace(",",".")
+            }}
+          </td>
         </tr>
-        {% endfor %}
+        {% else %} {% for psn in trx.pesanan["pesanan"] %}
+        <tr class="align-middle text-center">
+          <td scope="row">{{ loop.index }}</td>
+          <td ondblclick="updateStatus({{ trx.id }}, '{{ trx.status }}')">
+            {% if trx.status == "Belum Lunas" %}
+            <span class="block bg-[var(--kuy-merah)] w-3 h-3 rounded-sm"></span>
+            {% else %}
+            <span class="block bg-[var(--bs-teal)] w-3 h-3 rounded-sm"></span>
+            {% endif %}
+          </td>
+          <td>{{ trx.nama }}</td>
+          <td>{{ trx.nomor_telepon }}</td>
+          <td>{{ psn["jumlah"] if psn["jumlah"] != "" else "-" }}</td>
+          <td>{{ psn["roti"] if psn["roti"] != "" else "-" }}</td>
+          <td>{{ psn["ukuran"] if psn["ukuran"] != "" else "-" }}</td>
+          <td>{{ psn["rasa"] if psn["rasa"] != "" else "-" }}</td>
+          <td>
+            {{ psn["topping"] if psn["topping"] != none else "-" }}
+          </td>
+          <td>
+            {{ "Rp.
+            {:,.0f}".format(trx.kode_unik+trx.pesanan["total"]).replace(",",".")
+            }}
+          </td>
+        </tr>
+        {% endfor %} {% endif %} {% endfor %}
       </tbody>
     </table>
   </div>

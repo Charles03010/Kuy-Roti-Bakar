@@ -26,9 +26,102 @@
     <a class="navLink active" href="/"> Home </a>
     <a class="navLink" href="/menu"> Menu </a>
   </div>
+  {% if 'is_logged_in' in session %}
+  <div>
+    <a
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      class="cursor-pointer mx-4 material-symbols-outlined"
+      onclick="HandleClickCart()"
+    >
+      shopping_cart
+    </a>
+    <a class="navLink align-text-bottom" href="/logout"
+      >{{ session["data"]["nama"] }}</a
+    >
+  </div>
+  {% else %}
   <a class="navLink" href="/login">Login</a>
+  {% endif %}
 </nav>
 {% endblock %} {% block body %}
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Keranjang</h1>
+      </div>
+      <div class="modal-body" id="keranjang">
+      </div>
+      <div class="modal-footer flex-nowrap justify-between">
+        <div class="form-floating">
+          <input
+            type="email"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Total Harga"
+            disabled
+          />
+          <label for="floatingInput">Total Harga</label>
+        </div>
+        <div class="tombol">
+          <button
+            type="button"
+            class="btn btn-secondary bg-[var(--bs-btn-bg)]"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+          id="bayar"
+            type="button"
+            class="btn btn-success bg-[var(--bs-btn-bg)]"
+            data-bs-target="#exampleModalToggle2"
+            data-bs-toggle="modal"
+            onclick="HandlePayment()"
+          >
+            Bayar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="exampleModalToggle2"
+  aria-hidden="true"
+  aria-labelledby="exampleModalToggleLabel2"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">QRIS</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body relative">
+        <img src="/static/qris/template.png" alt="QRIS Kuy Roti Bakar" />
+        <div class="overflow-hidden absolute h-[260px] w-[260px] top-[9.5rem] left-[5.5rem]">
+          <img id="qris" class="object-cover object-center" src="" alt="QRIS Kuy Roti Bakar">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="hero">
   <div class="heroContent">
     <h1 class="heroTitle">Kuy! Roti Bakar 🍞</h1>
@@ -155,11 +248,24 @@
           Keju
         </button>
       </div>
+      <h3 id="toppingLabel" class="label">Jumlah:</h3>
+      <input
+        class="form-control form-control-sm w-20"
+        type="text"
+        id="jumlah"
+        placeholder="Jumlah"
+        maxlength="2"
+        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+      />
       <br />
       <div class="pilihan">
+        {% if 'is_logged_in' in session %}
         <button onclick="HandleClickSubmit()" class="btn btn-success">
           Order Sekarang!
         </button>
+        {% else %}
+        <button class="btn btn-success">Order Sekarang!</button>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -178,20 +284,29 @@
     }
   });
 </script>
+<script src="/static/js/qris.js"></script>
 <script>
   let data = {
-    Roti: "",
-    Ukuran: "",
-    Rasa: "",
-    Topping: "",
+    roti: "",
+    ukuran: "",
+    rasa: "",
+    topping: "",
+    jumlah: 0,
+    total:0
   };
+  let id = {{ session["data"]["no_telepon"] if session["data"] else "0" | safe }};
+  let jumlah = document.getElementById("jumlah");
+  jumlah.addEventListener("change", function () {
+    data["jumlah"] = jumlah.value;
+    console.log(data);
+  });
   function HandleSetData(key, value, elem) {
+    key = key.toLowerCase();
     let img = document.querySelector(".menuImage");
-    document.querySelector("#" + key.toLowerCase() + "Label").textContent =
+    document.querySelector("#" + key + "Label").textContent =
       "Pilihan " + key + ": " + value;
-    //elem.classList.add("btn-success");
     elem.classList = "btn border btn-success";
-    let active = document.querySelectorAll("#" + key.toLowerCase() + " button");
+    let active = document.querySelectorAll("#" + key + " button");
     active.forEach((element) => {
       if (element != elem) {
         element.classList = "btn btn-light border";
@@ -203,7 +318,7 @@
     } else {
       data[key] = value;
     }
-    if (key == "Rasa") {
+    if (key == "rasa") {
       img.src = "/static/img/Menu/" + value + ".jpg";
       if (data[key] == "") {
         img.src = "/static/img/Menu/polos.jpg";
@@ -211,6 +326,114 @@
     }
     console.log(data);
   }
-  function HandleClickSubmit() {}
+  function HandleClickSubmit() {
+    fetch(`/keranjang/${id}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json' // Set content type for JSON data
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status == "success") {
+          window.location.reload();
+        }
+      }).catch(error => console.error('Error:', error));;
+  }
+  function HandleDelCart(id_keranjang) {
+    fetch(`/del/keranjang`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json' // Set content type for JSON data
+      },
+      body: JSON.stringify({
+        "no":id,
+        "id":id_keranjang
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status == "success") {
+          window.location.reload();
+        }
+      }).catch(error => console.error('Error:', error));;
+  }
+  function HandlePayment(){
+    fetch(`/payment`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "no":id
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status == "success") {
+          nominal = data.data["kode_unik"]+data.data["total"]
+          document.getElementById("qris").src = encodeURI(qris(nominal.toString()));
+        }
+      }).catch(error => console.error('Error:', error));;
+  }
+  function HandleClickCart() {
+    fetch(`/keranjang/${id}`, {
+      method: "GET",
+    })
+      .then((res) =>{
+      if (res.status == 200){
+        return res.json()}
+      else{
+        return null}}
+      )
+      .then((data) => {
+        if (data != null) {
+          let keranjang = document.getElementById("keranjang");
+          let total = 0
+          let tempKeranjang = "";
+          data.forEach((elem,idx) => {
+            total += elem.total;
+            tempKeranjang += `<div class="flex items-center justify-between mb-3">
+              <div class="flex items-center justify-start gap-x-3">
+        <h2>${idx+=1}</h2>
+        <img
+        class="w-20 rounded"
+        src="/static/img/Menu/${elem.rasa.toLowerCase()}.jpg"
+        alt="Menu Kuy"
+        />
+        <div class="flex flex-col gap-y-2">
+          <h2 class="text-sm font-medium">${elem.jumlah} ${elem.roti} ${elem.ukuran} ${elem.rasa} ${elem.topping != null ? elem.topping : ""}</h2>
+          <h2 class="text-sm font-normal">Rp. <span>${elem.total.toLocaleString('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            useGrouping: true,
+            maximumFractionDigits: 0
+          }).replace('Rp', '')}</span></h2>
+        </div>
+      </div>
+      <button class="btn btn-danger bg-[var(--bs-btn-bg)] w-max p-1" onclick="HandleDelCart(${elem.id_keranjang})">
+        <span class="material-symbols-outlined align-middle text-sm">
+          delete
+        </span>
+      </button></div>`;});
+      keranjang.innerHTML = tempKeranjang;
+      document.getElementById("floatingInput").value = total.toLocaleString('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        useGrouping: true,
+        maximumFractionDigits: 0
+      }).replace('Rp', '');
+    }else{
+      document.getElementById("bayar").style = "display:none";
+      document.getElementById("floatingInput").value = ""
+      keranjang.innerHTML = `<div class="flex items-center justify-center">
+      <h2 class="text-sm font-medium">Keranjang Kosong</h2>
+      </div>`;
+    }
+  });
+  }
 </script>
 {% endblock %}
