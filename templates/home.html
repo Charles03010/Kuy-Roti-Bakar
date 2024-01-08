@@ -41,58 +41,54 @@
         </tr>
       </thead>
       <tbody>
-        {% for trx in transaksi %} {% if trx.pesanan["pesanan"] | count == 1 %}
-        {% set pesanan = trx.pesanan["pesanan"][0] %}
+        {% for trx in transaksi %} {% set itr = loop.index %} 
+        {% for psn in
+        trx.pesanan["pesanan"] %}
         <tr class="align-middle text-center">
-          <td scope="row">{{ loop.index }}</td>
-          <td ondblclick="updateStatus({{ trx.id }}, '{{ trx.status }}')">
+          {% if loop.first %}
+          <td
+            scope="row"
+            rowspan="{{ trx.pesanan['pesanan'] | count if trx.pesanan['pesanan'] | count != 1 else ''}}"
+          >
+            {{ itr }}
+          </td>
+          <td
+            ondblclick="updateStatus({{ trx.id }}, '{{ trx.status }}')"
+            rowspan="{{ trx.pesanan['pesanan'] | count if trx.pesanan['pesanan'] | count != 1 else ''}}"
+          >
             {% if trx.status == "Belum Lunas" %}
             <span class="block bg-[var(--kuy-merah)] w-3 h-3 rounded-sm"></span>
             {% else %}
             <span class="block bg-[var(--bs-teal)] w-3 h-3 rounded-sm"></span>
             {% endif %}
           </td>
-          <td>{{ trx.nama }}</td>
-          <td>{{ trx.nomor_telepon }}</td>
-          <td>{{ pesanan["jumlah"] if pesanan["jumlah"] != "" else "-" }}</td>
-          <td>{{ pesanan["roti"] if pesanan["roti"] != "" else "-" }}</td>
-          <td>{{ pesanan["ukuran"] if pesanan["ukuran"] != "" else "-" }}</td>
-          <td>{{ pesanan["rasa"] if pesanan["rasa"] != "" else "-" }}</td>
-          <td>
-            {{ pesanan["topping"] if pesanan["topping"] != none else "-" }}
+          <td
+            rowspan="{{ trx.pesanan['pesanan'] | count if trx.pesanan['pesanan'] | count != 1 else ''}}"
+          >
+            {{ trx.nama }}
           </td>
-          <td>
-            {{ "Rp.
-            {:,.0f}".format(trx.kode_unik+trx.pesanan["total"]).replace(",",".")
-            }}
+          <td
+            rowspan="{{ trx.pesanan['pesanan'] | count if trx.pesanan['pesanan'] | count != 1 else ''}}"
+          >
+            {{ trx.nomor_telepon }}
           </td>
-        </tr>
-        {% else %} {% for psn in trx.pesanan["pesanan"] %}
-        <tr class="align-middle text-center">
-          <td scope="row">{{ loop.index }}</td>
-          <td ondblclick="updateStatus({{ trx.id }}, '{{ trx.status }}')">
-            {% if trx.status == "Belum Lunas" %}
-            <span class="block bg-[var(--kuy-merah)] w-3 h-3 rounded-sm"></span>
-            {% else %}
-            <span class="block bg-[var(--bs-teal)] w-3 h-3 rounded-sm"></span>
-            {% endif %}
-          </td>
-          <td>{{ trx.nama }}</td>
-          <td>{{ trx.nomor_telepon }}</td>
+          {% endif %}
           <td>{{ psn["jumlah"] if psn["jumlah"] != "" else "-" }}</td>
           <td>{{ psn["roti"] if psn["roti"] != "" else "-" }}</td>
           <td>{{ psn["ukuran"] if psn["ukuran"] != "" else "-" }}</td>
           <td>{{ psn["rasa"] if psn["rasa"] != "" else "-" }}</td>
-          <td>
-            {{ psn["topping"] if psn["topping"] != none else "-" }}
-          </td>
-          <td>
+          <td>{{ psn["topping"] if psn["topping"] != none else "-" }}</td>
+          {% if loop.first %}
+          <td
+            rowspan="{{ trx.pesanan['pesanan'] | count if trx.pesanan['pesanan'] | count != 1 else ''}}"
+          >
             {{ "Rp.
             {:,.0f}".format(trx.kode_unik+trx.pesanan["total"]).replace(",",".")
             }}
           </td>
+          {% endif %}
         </tr>
-        {% endfor %} {% endif %} {% endfor %}
+        {% endfor %} {% endfor %}
       </tbody>
     </table>
   </div>
